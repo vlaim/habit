@@ -741,6 +741,44 @@
             `}).join('');
         }
 
+        function showTooltip(event, dateString) {
+            const tooltip = document.getElementById('globalTooltip');
+            const date = new Date(dateString);
+            const formattedDate = date.toLocaleDateString('en-US', { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            
+            tooltip.textContent = formattedDate;
+            tooltip.style.opacity = '1';
+            
+            // Position tooltip near the cursor
+            const rect = event.target.getBoundingClientRect();
+            const tooltipRect = tooltip.getBoundingClientRect();
+            
+            let left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
+            let top = rect.top - tooltipRect.height - 8;
+            
+            // Adjust if tooltip would go off screen
+            if (left < 0) left = 8;
+            if (left + tooltipRect.width > window.innerWidth) {
+                left = window.innerWidth - tooltipRect.width - 8;
+            }
+            if (top < 0) {
+                top = rect.bottom + 8;
+            }
+            
+            tooltip.style.left = left + 'px';
+            tooltip.style.top = top + 'px';
+        }
+
+        function hideTooltip() {
+            const tooltip = document.getElementById('globalTooltip');
+            tooltip.style.opacity = '0';
+        }
+
         document.getElementById('habitInput').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 addHabit();
