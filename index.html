@@ -3,495 +3,97 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Habit Tracker</title>
+    
+    <!-- SEO Meta Tags -->
+    <title>Habit Tracker - Build Better Habits Daily | Free Online Tool</title>
+    <meta name="description" content="Free online habit tracker to build and maintain daily habits. Track your progress with visual calendar, streaks, and statistics. Data stored locally in your browser.">
+    <meta name="keywords" content="habit tracker, daily habits, habit building, productivity, self improvement, goal tracking, habit calendar, streak tracker">
+    <meta name="author" content="Vladislav Alexeyev <vlad@alexeyev.me>">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="English">
+    <meta name="revisit-after" content="7 days">
+    
+    <!-- Open Graph Tags -->
+    <meta property="og:title" content="Habit Tracker - Build Better Habits Daily">
+    <meta property="og:description" content="Free online habit tracker to build and maintain daily habits. Track your progress with visual calendar, streaks, and statistics.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://habit.vlaim.cloud/">
+    <meta property="og:image" content="https://habit.vlaim.cloud/android-chrome-512x512.png">
+    <meta property="og:image:alt" content="Habit Tracker Application Screenshot">
+    <meta property="og:site_name" content="Habit Tracker">
+    <meta property="og:locale" content="en_US">
+    
+    <!-- Twitter Card Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Habit Tracker - Build Better Habits Daily">
+    <meta name="twitter:description" content="Free online habit tracker to build and maintain daily habits. Track your progress with visual calendar, streaks, and statistics.">
+    <meta name="twitter:image" content="https://habit.vlaim.cloud/android-chrome-512x512.png">
+    <meta name="twitter:image:alt" content="Habit Tracker Application Screenshot">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://habit.vlaim.cloud/">
+    
+    <!-- Favicons -->
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="manifest" href="/site.webmanifest">
-    <style>
-        :root {
-            --bg-primary: #f5f5f5;
-            --bg-secondary: white;
-            --bg-tertiary: #f8f9fa;
-            --text-primary: #333;
-            --text-secondary: #666;
-            --border-color: #eee;
-            --border-light: #ddd;
-            --day-default: #ebedf0;
-            --day-completed: #39d353;
-            --day-today: #0969da;
-            --shadow: rgba(0,0,0,0.1);
-        }
-        
-        [data-theme="dark"] {
-            --bg-primary: #1a1a1a;
-            --bg-secondary: #2d2d2d;
-            --bg-tertiary: #333;
-            --text-primary: #e0e0e0;
-            --text-secondary: #b0b0b0;
-            --border-color: #404040;
-            --border-light: #555;
-            --day-default: #404040;
-            --day-completed: #28a745;
-            --day-today: #007bff;
-            --shadow: rgba(0,0,0,0.3);
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 12px;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-        
-        @media (max-width: 768px) {
-            body {
-                padding: 8px;
-            }
-        }
-        
-        .container {
-            background: var(--bg-secondary);
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 2px 4px var(--shadow);
-            transition: background-color 0.3s ease;
-        }
-        
-        @media (max-width: 768px) {
-            .container {
-                padding: 16px;
-                border-radius: 4px;
-            }
-        }
-        
-        h1 {
-            margin: 0 0 20px 0;
-            color: var(--text-primary);
-            font-size: 28px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .theme-switcher {
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border-color);
-            color: var(--text-primary);
-            padding: 8px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.3s ease;
-            min-height: auto;
-        }
-        
-        .theme-switcher:hover {
-            background: var(--border-color);
-        }
-        
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 24px;
-                margin: 0 0 16px 0;
-            }
-        }
-        
-        .add-habit {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 24px;
-            flex-wrap: wrap;
-        }
-        
-        @media (max-width: 768px) {
-            .add-habit {
-                flex-direction: column;
-                gap: 12px;
-            }
-        }
-        
-        .sort-controls {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 24px;
-            padding: 12px;
-            background: var(--bg-tertiary);
-            border-radius: 6px;
-            transition: background-color 0.3s ease;
-        }
-        
-        .sort-controls label {
-            font-size: 14px;
-            color: var(--text-secondary);
-            font-weight: 500;
-        }
-        
-        .sort-controls select {
-            padding: 8px 12px;
-            border: 1px solid var(--border-light);
-            border-radius: 6px;
-            background: var(--bg-secondary);
-            color: var(--text-primary);
-            font-size: 14px;
-            cursor: pointer;
-            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
-        }
-        
-        .sort-controls select:focus {
-            outline: none;
-            border-color: #007AFF;
-        }
-        
-        @media (max-width: 768px) {
-            .sort-controls {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 8px;
-            }
-            
-            .sort-controls select {
-                width: 100%;
-            }
-        }
-        
-        .import-export {
-            display: flex;
-            gap: 8px;
-            margin-top: 24px;
-            padding-top: 20px;
-            border-top: 1px solid var(--border-color);
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        
-        @media (max-width: 768px) {
-            .import-export {
-                flex-direction: column;
-                gap: 12px;
-                margin-top: 20px;
-            }
-        }
-        
-        .footer-notice {
-            margin-top: 20px;
-            padding: 16px;
-            background: var(--bg-tertiary);
-            border-radius: 6px;
-            font-size: 13px;
-            line-height: 1.5;
-            color: var(--text-secondary);
-            text-align: center;
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-        
-        .footer-notice a {
-            color: #007AFF;
-            text-decoration: none;
-        }
-        
-        .footer-notice a:hover {
-            text-decoration: underline;
-        }
-        
-        @media (max-width: 768px) {
-            .footer-notice {
-                font-size: 12px;
-                padding: 12px;
-                margin-top: 16px;
-            }
-        }
-        
-        input[type="text"] {
-            flex: 1;
-            padding: 12px 16px;
-            border: 1px solid var(--border-light);
-            border-radius: 8px;
-            font-size: 16px;
-            min-height: 44px;
-            box-sizing: border-box;
-            background: var(--bg-secondary);
-            color: var(--text-primary);
-            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
-        }
-        
-        @media (max-width: 768px) {
-            input[type="text"] {
-                width: 100%;
-                font-size: 16px;
-            }
-        }
-        
-        button {
-            padding: 12px 20px;
-            background: #007AFF;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
-            min-height: 44px;
-            touch-action: manipulation;
-        }
-        
-        @media (max-width: 768px) {
-            button {
-                width: 100%;
-                padding: 14px 20px;
-                font-size: 16px;
-            }
-        }
-        
-        button:hover {
-            background: #0056CC;
-        }
-        
-        .habit {
-            margin-bottom: 24px;
-            padding: 16px;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            transition: border-color 0.3s ease;
-        }
-        
-        @media (max-width: 768px) {
-            .habit {
-                margin-bottom: 20px;
-                padding: 12px;
-            }
-        }
-        
-        .habit-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 16px;
-            gap: 12px;
-        }
-        
-        @media (max-width: 768px) {
-            .habit-header {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 8px;
-            }
-        }
-        
-        .habit-name {
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-        
-        .habit-stats {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 14px;
-            color: var(--text-secondary);
-            flex-wrap: wrap;
-        }
-        
-        @media (max-width: 768px) {
-            .habit-stats {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 8px;
-                font-size: 13px;
-            }
-        }
-        
-        .delete-btn, .rename-btn {
-            padding: 6px 12px;
-            font-size: 13px;
-            min-height: auto;
-        }
-        
-        .delete-btn {
-            background: #FF3B30;
-        }
-        
-        .rename-btn {
-            background: #007AFF;
-        }
-        
-        @media (max-width: 768px) {
-            .delete-btn, .rename-btn {
-                width: 100%;
-                padding: 10px 12px;
-                font-size: 14px;
-            }
-        }
-        
-        .delete-btn:hover {
-            background: #D70015;
-        }
-        
-        .calendar {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            overflow-x: auto;
-        }
-        
-        @media (max-width: 768px) {
-            .calendar {
-                gap: 2px;
-            }
-        }
-        
-        .calendar-header {
-            display: grid;
-            grid-template-columns: repeat(53, 12px);
-            gap: 2px;
-            margin-bottom: 8px;
-            font-size: 10px;
-            color: var(--text-secondary);
-            overflow-x: auto;
-        }
-        
-        @media (max-width: 768px) {
-            .calendar-header {
-                grid-template-columns: repeat(53, 8px);
-                gap: 1px;
-                font-size: 8px;
-            }
-        }
-        
-        .month-label {
-            grid-column: span 4;
-            text-align: left;
-        }
-        
-        .calendar-grid {
-            display: grid;
-            grid-template-columns: repeat(53, 12px);
-            gap: 2px;
-            overflow-x: auto;
-        }
-        
-        @media (max-width: 768px) {
-            .calendar-grid {
-                grid-template-columns: repeat(53, 8px);
-                gap: 1px;
-            }
-        }
-        
-        .day-square {
-            width: 12px;
-            height: 12px;
-            background: var(--day-default);
-            border-radius: 2px;
-            cursor: pointer;
-            position: relative;
-            touch-action: manipulation;
-            transition: background-color 0.3s ease;
-        }
-        
-        @media (max-width: 768px) {
-            .day-square {
-                width: 8px;
-                height: 8px;
-                border-radius: 1px;
-            }
-        }
-        
-        .day-square:hover {
-            outline: 1px solid #333;
-        }
-        
-        .day-square.completed {
-            background: var(--day-completed);
-        }
-        
-        .day-square.today {
-            outline: 2px solid var(--day-today);
-        }
-        
-        .tooltip {
-            position: fixed;
-            bottom: auto;
-            top: auto;
-            left: auto;
-            right: auto;
-            transform: none;
-            background: var(--text-primary);
-            color: var(--bg-secondary);
-            padding: 6px 10px;
-            border-radius: 4px;
-            font-size: 12px;
-            white-space: nowrap;
-            opacity: 0;
-            pointer-events: none;
-            z-index: 1000;
-            transition: opacity 0.2s ease;
-        }
-        
-        .day-square:hover .tooltip {
-            opacity: 1;
-        }
-        
-        .year-controls {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 16px;
-            margin-bottom: 16px;
-            padding: 8px;
-            background: var(--bg-tertiary);
-            border-radius: 6px;
-            transition: background-color 0.3s ease;
-        }
-        
-        .year-btn {
-            background: #6c757d;
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 14px;
-            min-width: 40px;
-        }
-        
-        .year-btn:hover {
-            background: #5a6268;
-        }
-        
-        .year-btn:disabled {
-            background: #dee2e6;
-            color: #6c757d;
-            cursor: not-allowed;
-        }
-        
-        .current-year {
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--text-primary);
-            min-width: 60px;
-            text-align: center;
-        }
-    </style>
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="css/styles.css">
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Habit Tracker",
+        "description": "Free online habit tracker to build and maintain daily habits with visual calendar and progress tracking",
+        "url": "https://habit.vlaim.cloud/",
+        "applicationCategory": "ProductivityApplication",
+        "operatingSystem": "Web Browser",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "author": {
+            "@type": "Person",
+            "name": "Vladislav"
+        },
+        "publisher": {
+            "@type": "Person",
+            "name": "Vladislav"
+        },
+        "browserRequirements": "Requires JavaScript and localStorage support",
+        "screenshot": "https://habit.vlaim.cloud/android-chrome-512x512.png",
+        "featureList": [
+            "Daily habit tracking",
+            "Visual calendar display",
+            "Streak counting",
+            "Progress statistics",
+            "Data import/export",
+            "Dark/light theme",
+            "Local data storage"
+        ]
+    }
+    </script>
 </head>
 <body>
     <div class="container">
         <h1>
             Habit Tracker
-            <button class="theme-switcher" onclick="toggleTheme()" id="themeButton">🌙</button>
+            <button class="theme-switcher" id="themeButton">🌙</button>
         </h1>
         
         <div class="add-habit">
             <input type="text" id="habitInput" placeholder="Enter a new habit">
-            <button onclick="addHabit()">Add Habit</button>
+            <button onclick="app.addHabit()">Add Habit</button>
         </div>
         
         <div class="sort-controls">
             <label for="sortSelect">Sort by:</label>
-            <select id="sortSelect" onchange="updateSorting()">
+            <select id="sortSelect">
                 <option value="name">Name (A-Z)</option>
                 <option value="name-desc">Name (Z-A)</option>
                 <option value="streak">Current Streak (High to Low)</option>
@@ -506,10 +108,10 @@
         <div id="habitsList"></div>
         
         <div class="import-export">
-            <button onclick="exportData()" style="background: #34C759;">Export JSON</button>
-            <input type="file" id="importFile" accept=".json" style="display: none;" onchange="importData(event)">
+            <button onclick="app.exportData()" style="background: #34C759;">Export JSON</button>
+            <input type="file" id="importFile" accept=".json" style="display: none;">
             <button onclick="document.getElementById('importFile').click()" style="background: #FF9500;">Import JSON</button>
-            <button onclick="clearAllData()" style="background: #FF3B30;">Clear All Data</button>
+            <button onclick="app.clearAllData()" style="background: #FF3B30;">Clear All Data</button>
         </div>
         
         <div class="footer-notice">
@@ -521,375 +123,10 @@
     
     <div id="globalTooltip" class="tooltip"></div>
 
-    <script>
-        let habits = JSON.parse(localStorage.getItem('habits')) || [];
-        let currentViewYear = new Date().getFullYear();
-        let currentSortBy = localStorage.getItem('sortBy') || 'name';
-
-        // Theme functionality
-        function initializeTheme() {
-            const savedTheme = localStorage.getItem('theme');
-            let isDark;
-            
-            if (savedTheme) {
-                isDark = savedTheme === 'dark';
-            } else {
-                // Auto-detect system preference on first visit
-                isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            }
-            
-            document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
-            updateThemeButton(isDark);
-        }
-
-        function toggleTheme() {
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            
-            document.documentElement.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-            updateThemeButton(newTheme === 'dark');
-        }
-
-        function updateThemeButton(isDark) {
-            const button = document.getElementById('themeButton');
-            button.textContent = isDark ? '☀️' : '🌙';
-            button.title = isDark ? 'Switch to light mode' : 'Switch to dark mode';
-        }
-
-        // Initialize theme on page load
-        initializeTheme();
-
-        function saveHabits() {
-            localStorage.setItem('habits', JSON.stringify(habits));
-        }
-
-        function updateSorting() {
-            const sortSelect = document.getElementById('sortSelect');
-            currentSortBy = sortSelect.value;
-            localStorage.setItem('sortBy', currentSortBy);
-            renderHabits();
-        }
-
-        function sortHabits(habitsArray) {
-            const sortedHabits = [...habitsArray];
-            
-            switch (currentSortBy) {
-                case 'name':
-                    return sortedHabits.sort((a, b) => a.name.localeCompare(b.name));
-                case 'name-desc':
-                    return sortedHabits.sort((a, b) => b.name.localeCompare(a.name));
-                case 'streak':
-                    return sortedHabits.sort((a, b) => b.streak - a.streak);
-                case 'streak-asc':
-                    return sortedHabits.sort((a, b) => a.streak - b.streak);
-                case 'total':
-                    return sortedHabits.sort((a, b) => b.completedDates.length - a.completedDates.length);
-                case 'total-asc':
-                    return sortedHabits.sort((a, b) => a.completedDates.length - b.completedDates.length);
-                case 'recent':
-                    return sortedHabits.sort((a, b) => b.id - a.id);
-                case 'oldest':
-                    return sortedHabits.sort((a, b) => a.id - b.id);
-                default:
-                    return sortedHabits;
-            }
-        }
-
-        function changeYear(direction) {
-            currentViewYear += direction;
-            renderHabits();
-        }
-
-        function addHabit() {
-            const input = document.getElementById('habitInput');
-            const habitName = input.value.trim();
-            
-            if (habitName) {
-                const habit = {
-                    id: Date.now(),
-                    name: habitName,
-                    completedDates: [],
-                    streak: 0
-                };
-                
-                habits.push(habit);
-                input.value = '';
-                saveHabits();
-                renderHabits();
-            }
-        }
-
-        function formatDateEuropean(date) {
-            const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const day = String(date.getDate()).padStart(2, '0');
-            return `${year}-${month}-${day}`;
-        }
-
-        function toggleHabitDate(habitId, dateString) {
-            const habit = habits.find(h => h.id === habitId);
-            
-            if (habit.completedDates.includes(dateString)) {
-                habit.completedDates = habit.completedDates.filter(date => date !== dateString);
-            } else {
-                habit.completedDates.push(dateString);
-            }
-            
-            updateStreak(habit);
-            saveHabits();
-            renderHabits();
-        }
-
-        function updateStreak(habit) {
-            const today = new Date();
-            let streak = 0;
-            
-            // Start checking from yesterday to avoid requiring today to be completed
-            for (let i = 1; i < 366; i++) {
-                const checkDate = new Date(today);
-                checkDate.setDate(today.getDate() - i);
-                
-                if (habit.completedDates.includes(formatDateEuropean(checkDate))) {
-                    streak++;
-                } else {
-                    break;
-                }
-            }
-            
-            habit.streak = streak;
-        }
-
-        function deleteHabit(id) {
-            const habit = habits.find(h => h.id === id);
-            if (confirm(`Are you sure you want to delete the habit "${habit.name}"? This will permanently remove all ${habit.completedDates.length} completed days.`)) {
-                habits = habits.filter(h => h.id !== id);
-                saveHabits();
-                renderHabits();
-            }
-        }
-
-        function exportData() {
-            const exportData = {
-                exportDate: new Date().toISOString(),
-                version: "1.0",
-                habits: habits
-            };
-            
-            const dataStr = JSON.stringify(exportData, null, 2);
-            const dataBlob = new Blob([dataStr], {type: 'application/json'});
-            
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(dataBlob);
-            link.download = `habit-tracker-backup-${new Date().toISOString().split('T')[0]}.json`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-
-        function importData(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const importedData = JSON.parse(e.target.result);
-                    
-                    if (importedData.habits && Array.isArray(importedData.habits)) {
-                        if (habits.length > 0) {
-                            if (!confirm('This will replace all your current habits. Are you sure you want to continue?')) {
-                                return;
-                            }
-                        }
-                        
-                        habits = importedData.habits;
-                        habits.forEach(habit => updateStreak(habit));
-                        saveHabits();
-                        renderHabits();
-                        alert('Data imported successfully!');
-                    } else {
-                        alert('Invalid file format. Please select a valid habit tracker backup file.');
-                    }
-                } catch (error) {
-                    alert('Error reading file. Please make sure it\'s a valid JSON file.');
-                }
-            };
-            reader.readAsText(file);
-            event.target.value = '';
-        }
-
-        function clearAllData() {
-            const totalDays = habits.reduce((sum, habit) => sum + habit.completedDates.length, 0);
-            const message = habits.length > 0 
-                ? `Are you sure you want to delete all ${habits.length} habit(s) and ${totalDays} completed days? This action cannot be undone.`
-                : 'No data to clear.';
-            
-            if (habits.length > 0 && confirm(message)) {
-                habits = [];
-                saveHabits();
-                renderHabits();
-                alert('All data has been cleared.');
-            }
-        }
-
-        function renameHabit(id) {
-            const habit = habits.find(h => h.id === id);
-            const newName = prompt(`Rename habit "${habit.name}" to:`, habit.name);
-            
-            if (newName && newName.trim() && newName.trim() !== habit.name) {
-                habit.name = newName.trim();
-                saveHabits();
-                renderHabits();
-            }
-        }
-
-        function isDateCompleted(habit, dateString) {
-            return habit.completedDates.includes(dateString);
-        }
-
-        function generateCalendar(habit) {
-            const today = new Date();
-            const startDate = new Date(currentViewYear, 0, 1); // January 1st of selected year
-            const endDate = new Date(currentViewYear, 11, 31); // December 31st of selected year
-            
-            // Find the first Sunday before or on January 1st
-            const firstDay = startDate.getDay();
-            const calendarStart = new Date(startDate);
-            calendarStart.setDate(startDate.getDate() - firstDay);
-            
-            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-            let calendar = '<div class="calendar">';
-            
-            // Year controls
-            calendar += `
-                <div class="year-controls">
-                    <button class="year-btn" onclick="changeYear(-1)">←</button>
-                    <div class="current-year">${currentViewYear}</div>
-                    <button class="year-btn" onclick="changeYear(1)" ${currentViewYear >= today.getFullYear() ? 'disabled' : ''}>→</button>
-                </div>
-            `;
-            
-            
-            // Calendar grid
-            calendar += '<div class="calendar-grid">';
-            
-            for (let i = 0; i < 371; i++) { // Extra days to fill the grid
-                const currentDate = new Date(calendarStart);
-                currentDate.setDate(calendarStart.getDate() + i);
-                
-                if (currentDate.getFullYear() > currentViewYear) break;
-                
-                const dateString = formatDateEuropean(currentDate);
-                const isCompleted = isDateCompleted(habit, dateString);
-                const isToday = dateString === formatDateEuropean(today) && currentViewYear === today.getFullYear();
-                const isCurrentYear = currentDate.getFullYear() === currentViewYear;
-                
-                const dayOfWeek = currentDate.getDay();
-                const weekIndex = Math.floor(i / 7);
-                
-                calendar += `
-                    <div class="day-square ${isCompleted ? 'completed' : ''} ${isToday ? 'today' : ''} ${!isCurrentYear ? 'other-year' : ''}"
-                         onclick="toggleHabitDate(${habit.id}, '${dateString}')"
-                         onmouseenter="showTooltip(event, '${dateString}')"
-                         onmouseleave="hideTooltip()"
-                         style="grid-column: ${weekIndex + 1}; grid-row: ${dayOfWeek + 1}; ${!isCurrentYear ? 'opacity: 0.3;' : ''}">
-                    </div>
-                `;
-            }
-            
-            calendar += '</div></div>';
-            return calendar;
-        }
-
-        function getYearStats(habit, year) {
-            const yearDates = habit.completedDates.filter(date => date.startsWith(year.toString()));
-            return yearDates.length;
-        }
-
-        function renderHabits() {
-            const habitsList = document.getElementById('habitsList');
-            
-            if (habits.length === 0) {
-                habitsList.innerHTML = '<p style="text-align: center; color: #666;">No habits yet. Add one above!</p>';
-                return;
-            }
-            
-            const sortedHabits = sortHabits(habits);
-            
-            habitsList.innerHTML = sortedHabits.map(habit => {
-                const currentYear = new Date().getFullYear();
-                const yearTotal = getYearStats(habit, currentViewYear);
-                const isCurrentYear = currentViewYear === currentYear;
-                
-                return `
-                <div class="habit">
-                    <div class="habit-header">
-                        <div class="habit-name">${habit.name}</div>
-                        <div class="habit-stats">
-                            ${isCurrentYear ? `<span>Current Streak: ${habit.streak} days</span>` : ''}
-                            <span>${currentViewYear}: ${yearTotal} days</span>
-                            <span>All Time: ${habit.completedDates.length} days</span>
-                            <button class="rename-btn" onclick="renameHabit(${habit.id})">Rename</button>
-                            <button class="delete-btn" onclick="deleteHabit(${habit.id})">Delete</button>
-                        </div>
-                    </div>
-                    ${generateCalendar(habit)}
-                </div>
-            `}).join('');
-        }
-
-        function showTooltip(event, dateString) {
-            const tooltip = document.getElementById('globalTooltip');
-            const date = new Date(dateString);
-            const formattedDate = date.toLocaleDateString('en-US', { 
-                weekday: 'long', 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric' 
-            });
-            
-            tooltip.textContent = formattedDate;
-            tooltip.style.opacity = '1';
-            
-            // Position tooltip near the cursor
-            const rect = event.target.getBoundingClientRect();
-            const tooltipRect = tooltip.getBoundingClientRect();
-            
-            let left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
-            let top = rect.top - tooltipRect.height - 8;
-            
-            // Adjust if tooltip would go off screen
-            if (left < 0) left = 8;
-            if (left + tooltipRect.width > window.innerWidth) {
-                left = window.innerWidth - tooltipRect.width - 8;
-            }
-            if (top < 0) {
-                top = rect.bottom + 8;
-            }
-            
-            tooltip.style.left = left + 'px';
-            tooltip.style.top = top + 'px';
-        }
-
-        function hideTooltip() {
-            const tooltip = document.getElementById('globalTooltip');
-            tooltip.style.opacity = '0';
-        }
-
-        function initializeSortDropdown() {
-            const sortSelect = document.getElementById('sortSelect');
-            sortSelect.value = currentSortBy;
-        }
-
-        document.getElementById('habitInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                addHabit();
-            }
-        });
-
-        initializeSortDropdown();
-        renderHabits();
-    </script>
+    <script src="js/HabitManager.js"></script>
+    <script src="js/ThemeManager.js"></script>
+    <script src="js/CalendarRenderer.js"></script>
+    <script src="js/DataManager.js"></script>
+    <script src="js/App.js"></script>
 </body>
 </html>

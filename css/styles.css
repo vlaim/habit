@@ -1,0 +1,466 @@
+:root {
+    --bg-primary: #f5f5f5;
+    --bg-secondary: white;
+    --bg-tertiary: #f8f9fa;
+    --text-primary: #333;
+    --text-secondary: #666;
+    --border-color: #eee;
+    --border-light: #ddd;
+    --day-default: #ebedf0;
+    --day-completed: #39d353;
+    --day-today: #0969da;
+    --shadow: rgba(0,0,0,0.1);
+}
+
+[data-theme="dark"] {
+    --bg-primary: #1a1a1a;
+    --bg-secondary: #2d2d2d;
+    --bg-tertiary: #333;
+    --text-primary: #e0e0e0;
+    --text-secondary: #b0b0b0;
+    --border-color: #404040;
+    --border-light: #555;
+    --day-default: #404040;
+    --day-completed: #28a745;
+    --day-today: #007bff;
+    --shadow: rgba(0,0,0,0.3);
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 12px;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: 8px;
+    }
+}
+
+.container {
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px var(--shadow);
+    transition: background-color 0.3s ease;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 16px;
+        border-radius: 4px;
+    }
+}
+
+h1 {
+    margin: 0 0 20px 0;
+    color: var(--text-primary);
+    font-size: 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.theme-switcher {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    min-height: auto;
+}
+
+.theme-switcher:hover {
+    background: var(--border-color);
+}
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 24px;
+        margin: 0 0 16px 0;
+    }
+}
+
+.add-habit {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+    .add-habit {
+        flex-direction: column;
+        gap: 12px;
+    }
+}
+
+.sort-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 24px;
+    padding: 12px;
+    background: var(--bg-tertiary);
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
+}
+
+.sort-controls label {
+    font-size: 14px;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.sort-controls select {
+    padding: 8px 12px;
+    border: 1px solid var(--border-light);
+    border-radius: 6px;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.sort-controls select:focus {
+    outline: none;
+    border-color: #007AFF;
+}
+
+@media (max-width: 768px) {
+    .sort-controls {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+    
+    .sort-controls select {
+        width: 100%;
+    }
+}
+
+.import-export {
+    display: flex;
+    gap: 8px;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+@media (max-width: 768px) {
+    .import-export {
+        flex-direction: column;
+        gap: 12px;
+        margin-top: 20px;
+    }
+}
+
+.footer-notice {
+    margin-top: 20px;
+    padding: 16px;
+    background: var(--bg-tertiary);
+    border-radius: 6px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--text-secondary);
+    text-align: center;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.footer-notice a {
+    color: #007AFF;
+    text-decoration: none;
+}
+
+.footer-notice a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .footer-notice {
+        font-size: 12px;
+        padding: 12px;
+        margin-top: 16px;
+    }
+}
+
+input[type="text"] {
+    flex: 1;
+    padding: 12px 16px;
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    font-size: 16px;
+    min-height: 44px;
+    box-sizing: border-box;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+@media (max-width: 768px) {
+    input[type="text"] {
+        width: 100%;
+        font-size: 16px;
+    }
+}
+
+button {
+    padding: 12px 20px;
+    background: #007AFF;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    min-height: 44px;
+    touch-action: manipulation;
+}
+
+@media (max-width: 768px) {
+    button {
+        width: 100%;
+        padding: 14px 20px;
+        font-size: 16px;
+    }
+}
+
+button:hover {
+    background: #0056CC;
+}
+
+.habit {
+    margin-bottom: 24px;
+    padding: 16px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    transition: border-color 0.3s ease;
+}
+
+@media (max-width: 768px) {
+    .habit {
+        margin-bottom: 20px;
+        padding: 12px;
+    }
+}
+
+.habit-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+    gap: 12px;
+}
+
+@media (max-width: 768px) {
+    .habit-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+}
+
+.habit-name {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.habit-stats {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+    color: var(--text-secondary);
+    flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+    .habit-stats {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+        font-size: 13px;
+    }
+}
+
+.delete-btn, .rename-btn {
+    padding: 6px 12px;
+    font-size: 13px;
+    min-height: auto;
+}
+
+.delete-btn {
+    background: #FF3B30;
+}
+
+.rename-btn {
+    background: #007AFF;
+}
+
+@media (max-width: 768px) {
+    .delete-btn, .rename-btn {
+        width: 100%;
+        padding: 10px 12px;
+        font-size: 14px;
+    }
+}
+
+.delete-btn:hover {
+    background: #D70015;
+}
+
+.calendar {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    overflow-x: auto;
+}
+
+@media (max-width: 768px) {
+    .calendar {
+        gap: 2px;
+    }
+}
+
+.calendar-header {
+    display: grid;
+    grid-template-columns: repeat(53, 12px);
+    gap: 2px;
+    margin-bottom: 8px;
+    font-size: 10px;
+    color: var(--text-secondary);
+    overflow-x: auto;
+}
+
+@media (max-width: 768px) {
+    .calendar-header {
+        grid-template-columns: repeat(53, 8px);
+        gap: 1px;
+        font-size: 8px;
+    }
+}
+
+.month-label {
+    grid-column: span 4;
+    text-align: left;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(53, 12px);
+    gap: 2px;
+    overflow-x: auto;
+}
+
+@media (max-width: 768px) {
+    .calendar-grid {
+        grid-template-columns: repeat(53, 8px);
+        gap: 1px;
+    }
+}
+
+.day-square {
+    width: 12px;
+    height: 12px;
+    background: var(--day-default);
+    border-radius: 2px;
+    cursor: pointer;
+    position: relative;
+    touch-action: manipulation;
+    transition: background-color 0.3s ease;
+}
+
+@media (max-width: 768px) {
+    .day-square {
+        width: 8px;
+        height: 8px;
+        border-radius: 1px;
+    }
+}
+
+.day-square:hover {
+    outline: 1px solid #333;
+}
+
+.day-square.completed {
+    background: var(--day-completed);
+}
+
+.day-square.today {
+    outline: 2px solid var(--day-today);
+}
+
+.tooltip {
+    position: fixed;
+    bottom: auto;
+    top: auto;
+    left: auto;
+    right: auto;
+    transform: none;
+    background: var(--text-primary);
+    color: var(--bg-secondary);
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 1000;
+    transition: opacity 0.2s ease;
+}
+
+.day-square:hover .tooltip {
+    opacity: 1;
+}
+
+.year-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 16px;
+    padding: 8px;
+    background: var(--bg-tertiary);
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
+}
+
+.year-btn {
+    background: #6c757d;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    min-width: 40px;
+}
+
+.year-btn:hover {
+    background: #5a6268;
+}
+
+.year-btn:disabled {
+    background: #dee2e6;
+    color: #6c757d;
+    cursor: not-allowed;
+}
+
+.current-year {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    min-width: 60px;
+    text-align: center;
+}
