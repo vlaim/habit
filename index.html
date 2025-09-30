@@ -114,6 +114,51 @@
             }
         }
         
+        .sort-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 24px;
+            padding: 12px;
+            background: var(--bg-tertiary);
+            border-radius: 6px;
+            transition: background-color 0.3s ease;
+        }
+        
+        .sort-controls label {
+            font-size: 14px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+        
+        .sort-controls select {
+            padding: 8px 12px;
+            border: 1px solid var(--border-light);
+            border-radius: 6px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+        
+        .sort-controls select:focus {
+            outline: none;
+            border-color: #007AFF;
+        }
+        
+        @media (max-width: 768px) {
+            .sort-controls {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 8px;
+            }
+            
+            .sort-controls select {
+                width: 100%;
+            }
+        }
+        
         .import-export {
             display: flex;
             gap: 8px;
@@ -444,6 +489,20 @@
             <button onclick="addHabit()">Add Habit</button>
         </div>
         
+        <div class="sort-controls">
+            <label for="sortSelect">Sort by:</label>
+            <select id="sortSelect" onchange="updateSorting()">
+                <option value="name">Name (A-Z)</option>
+                <option value="name-desc">Name (Z-A)</option>
+                <option value="streak">Current Streak (High to Low)</option>
+                <option value="streak-asc">Current Streak (Low to High)</option>
+                <option value="total">Total Days (High to Low)</option>
+                <option value="total-asc">Total Days (Low to High)</option>
+                <option value="recent">Recently Added</option>
+                <option value="oldest">Oldest First</option>
+            </select>
+        </div>
+        
         <div id="habitsList"></div>
         
         <div class="import-export">
@@ -465,6 +524,7 @@
     <script>
         let habits = JSON.parse(localStorage.getItem('habits')) || [];
         let currentViewYear = new Date().getFullYear();
+        let currentSortBy = localStorage.getItem('sortBy') || 'name';
 
         // Theme functionality
         function initializeTheme() {
@@ -502,6 +562,38 @@
 
         function saveHabits() {
             localStorage.setItem('habits', JSON.stringify(habits));
+        }
+
+        function updateSorting() {
+            const sortSelect = document.getElementById('sortSelect');
+            currentSortBy = sortSelect.value;
+            localStorage.setItem('sortBy', currentSortBy);
+            renderHabits();
+        }
+
+        function sortHabits(habitsArray) {
+            const sortedHabits = [...habitsArray];
+            
+            switch (currentSortBy) {
+                case 'name':
+                    return sortedHabits.sort((a, b) => a.name.localeCompare(b.name));
+                case 'name-desc':
+                    return sortedHabits.sort((a, b) => b.name.localeCompare(a.name));
+                case 'streak':
+                    return sortedHabits.sort((a, b) => b.streak - a.streak);
+                case 'streak-asc':
+                    return sortedHabits.sort((a, b) => a.streak - b.streak);
+                case 'total':
+                    return sortedHabits.sort((a, b) => b.completedDates.length - a.completedDates.length);
+                case 'total-asc':
+                    return sortedHabits.sort((a, b) => a.completedDates.length - b.completedDates.length);
+                case 'recent':
+                    return sortedHabits.sort((a, b) => b.id - a.id);
+                case 'oldest':
+                    return sortedHabits.sort((a, b) => a.id - b.id);
+                default:
+                    return sortedHabits;
+            }
         }
 
         function changeYear(direction) {
@@ -723,7 +815,9 @@
                 return;
             }
             
-            habitsList.innerHTML = habits.map(habit => {
+            const sortedHabits = sortHabits(habits);
+            
+            habitsList.innerHTML = sortedHabits.map(habit => {
                 const currentYear = new Date().getFullYear();
                 const yearTotal = getYearStats(habit, currentViewYear);
                 const isCurrentYear = currentViewYear === currentYear;
@@ -783,12 +877,18 @@
             tooltip.style.opacity = '0';
         }
 
+        function initializeSortDropdown() {
+            const sortSelect = document.getElementById('sortSelect');
+            sortSelect.value = currentSortBy;
+        }
+
         document.getElementById('habitInput').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 addHabit();
             }
         });
 
+        initializeSortDropdown();
         renderHabits();
     </script>
 </body>
