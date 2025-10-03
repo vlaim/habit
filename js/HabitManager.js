@@ -5,7 +5,16 @@ class HabitManager {
     }
 
     loadHabits() {
-        return JSON.parse(localStorage.getItem('habits')) || [];
+        const habits = JSON.parse(localStorage.getItem('habits')) || [];
+        return habits.map(habit => {
+            if (!habit.motivationalMessages) {
+                habit.motivationalMessages = [];
+            }
+            if (habit.motivationalMessages.length > 0 && !habit.currentDisplayMessage) {
+                habit.currentDisplayMessage = habit.motivationalMessages[0];
+            }
+            return habit;
+        });
     }
 
     saveHabits() {
@@ -19,7 +28,8 @@ class HabitManager {
             id: Date.now(),
             name: name.trim(),
             completedDates: [],
-            streak: 0
+            streak: 0,
+            motivationalMessages: []
         };
         
         this.habits.push(habit);
@@ -144,11 +154,85 @@ class HabitManager {
 
     importHabits(habits) {
         this.habits = habits;
-        this.habits.forEach(habit => this.updateStreak(habit));
+        this.habits.forEach(habit => {
+            if (!habit.motivationalMessages) {
+                habit.motivationalMessages = [];
+            }
+            this.updateStreak(habit);
+        });
         this.saveHabits();
     }
 
     getHabits() {
         return this.habits;
+    }
+
+    addMotivationalMessage(habitId, message) {
+        const habit = this.habits.find(h => h.id === habitId);
+        if (!habit || !message || !message.trim()) return false;
+        
+        const messageObj = {
+            id: Date.now(),
+            text: message.trim(),
+            createdAt: new Date().toISOString()
+        };
+        
+        habit.motivationalMessages.push(messageObj);
+        
+        if (habit.motivationalMessages.length === 1) {
+            habit.currentDisplayMessage = messageObj;
+        }
+        
+        this.saveHabits();
+        return true;
+    }
+
+    editMotivationalMessage(habitId, messageId, newText) {
+        const habit = this.habits.find(h => h.id === habitId);
+        if (!habit || !newText || !newText.trim()) return false;
+        
+        const message = habit.motivationalMessages.find(m => m.id === messageId);
+        if (!message) return false;
+        
+        message.text = newText.trim();
+        this.saveHabits();
+        return true;
+    }
+
+    deleteMotivationalMessage(habitId, messageId) {
+        const habit = this.habits.find(h => h.id === habitId);
+        if (!habit) return false;
+        
+        const wasCurrentMessage = habit.currentDisplayMessage && habit.currentDisplayMessage.id === messageId;
+        
+        habit.motivationalMessages = habit.motivationalMessages.filter(m => m.id !== messageId);
+        
+        if (wasCurrentMessage || !habit.currentDisplayMessage) {
+            habit.currentDisplayMessage = habit.motivationalMessages.length > 0 ? habit.motivationalMessages[0] : null;
+        }
+        
+        this.saveHabits();
+        return true;
+    }
+
+    getRandomMotivationalMessage(habitId) {
+        const habit = this.habits.find(h => h.id === habitId);
+        if (!habit || habit.motivationalMessages.length === 0) return null;
+        
+        const randomIndex = Math.floor(Math.random() * habit.motivationalMessages.length);
+        return habit.motivationalMessages[randomIndex];
+    }
+
+    getNextMotivationalMessage(habitId, currentMessageId) {
+        const habit = this.habits.find(h => h.id === habitId);
+        if (!habit || habit.motivationalMessages.length === 0) return null;
+        
+        if (habit.motivationalMessages.length === 1) {
+            return habit.motivationalMessages[0];
+        }
+        
+        const currentIndex = habit.motivationalMessages.findIndex(m => m.id === currentMessageId);
+        const nextIndex = (currentIndex + 1) % habit.motivationalMessages.length;
+        return habit.motivationalMessages[nextIndex];
     }
 }
