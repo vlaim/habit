@@ -95,13 +95,34 @@ class CalendarRenderer {
                         ${isCurrentYear ? `<span>Current Streak: ${habit.streak} days</span>` : ''}
                         <span>${this.currentViewYear}: ${yearTotal} days</span>
                         <span>All Time: ${habit.completedDates.length} days</span>
+                        <button class="settings-btn" onclick="app.openHabitSettings(${habit.id})" title="Motivational Messages">⚙️</button>
                         <button class="rename-btn" onclick="app.renameHabit(${habit.id})">Rename</button>
                         <button class="delete-btn" onclick="app.deleteHabit(${habit.id})">Delete</button>
                     </div>
                 </div>
+                ${this.generateMotivationalMessageArea(habit)}
                 ${this.generateCalendar(habit)}
             </div>
         `}).join('');
+    }
+
+    generateMotivationalMessageArea(habit) {
+        if (!habit.motivationalMessages || habit.motivationalMessages.length === 0) {
+            return '';
+        }
+
+        const currentMessage = habit.currentDisplayMessage || habit.motivationalMessages[0];
+        
+        return `
+            <div class="motivational-message-area">
+                <div class="motivational-message" id="motivational-message-${habit.id}">
+                    "${currentMessage.text}"
+                </div>
+                ${habit.motivationalMessages.length > 1 ? `
+                    <button class="next-message-btn" onclick="app.showNextMotivationalMessage(${habit.id})" title="Next message">→</button>
+                ` : ''}
+            </div>
+        `;
     }
 
     showTooltip(event, dateString) {
