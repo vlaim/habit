@@ -10,8 +10,9 @@ class HabitManager {
             if (!habit.motivationalMessages) {
                 habit.motivationalMessages = [];
             }
-            if (habit.motivationalMessages.length > 0 && !habit.currentDisplayMessage) {
-                habit.currentDisplayMessage = habit.motivationalMessages[0];
+            if (habit.motivationalMessages.length > 0) {
+                const randomIndex = Math.floor(Math.random() * habit.motivationalMessages.length);
+                habit.currentDisplayMessage = habit.motivationalMessages[randomIndex];
             }
             return habit;
         });
