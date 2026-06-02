@@ -1,3 +1,24 @@
+.general-habit {
+    border: 2px solid var(--day-completed);
+    background: linear-gradient(90deg, var(--bg-tertiary) 0%, var(--bg-secondary) 100%);
+    box-shadow: 0 0 8px 0 var(--day-completed)33;
+    margin-bottom: 32px;
+}
+.general-habit .habit-header {
+    background: none;
+    border-bottom: 1px solid var(--day-completed);
+    margin-bottom: 12px;
+}
+.general-habit .habit-name {
+    font-weight: bold;
+    color: var(--day-completed);
+    font-size: 22px;
+}
+.general-habit .habit-stats span {
+    color: var(--day-completed);
+    font-size: 16px;
+    font-weight: 500;
+}
 :root {
     --bg-primary: #f5f5f5;
     --bg-secondary: white;

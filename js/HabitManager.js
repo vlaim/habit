@@ -2,6 +2,23 @@ class HabitManager {
     constructor() {
         this.habits = this.loadHabits();
         this.currentSortBy = localStorage.getItem('sortBy') || 'name';
+        this.ensureGeneralTab();
+    }
+    // Garante que a aba geral existe e está sempre na posição 0
+    ensureGeneralTab() {
+        if (!this.habits.length || this.habits[0]?.isGeneral !== true) {
+            const generalHabit = {
+                id: -1,
+                name: 'General',
+                isGeneral: true,
+                completedDates: [],
+                streak: 0,
+                motivationalMessages: [],
+                currentDisplayMessage: null
+            };
+            this.habits.unshift(generalHabit);
+            this.saveHabits();
+        }
     }
 
     loadHabits() {
@@ -24,7 +41,6 @@ class HabitManager {
 
     addHabit(name) {
         if (!name || !name.trim()) return false;
-        
         const habit = {
             id: Date.now(),
             name: name.trim(),
@@ -32,32 +48,41 @@ class HabitManager {
             streak: 0,
             motivationalMessages: []
         };
-        
         this.habits.push(habit);
         this.saveHabits();
+        this.ensureGeneralTab();
         return true;
     }
 
     deleteHabit(id) {
+        if (id === -1) return false; // Não pode excluir a aba geral
         const habit = this.habits.find(h => h.id === id);
         if (!habit) return false;
-        
         const confirmed = confirm(`Are you sure you want to delete the habit "${habit.name}"? This will permanently remove all ${habit.completedDates.length} completed days.`);
         if (confirmed) {
             this.habits = this.habits.filter(h => h.id !== id);
             this.saveHabits();
+            this.ensureGeneralTab();
             return true;
         }
         return false;
     }
 
     renameHabit(id, newName) {
+        if (id === -1) return false; // Não pode renomear a aba geral
         const habit = this.habits.find(h => h.id === id);
         if (!habit || !newName || !newName.trim()) return false;
-        
         habit.name = newName.trim();
         this.saveHabits();
         return true;
+    }
+    // Calcula a proporção de hábitos marcados para um dia
+    getGeneralProgress(dateString) {
+        // Não conta a aba geral
+        const habits = this.habits.filter(h => !h.isGeneral);
+        if (habits.length === 0) return 0;
+        const completed = habits.filter(h => h.completedDates.includes(dateString)).length;
+        return completed / habits.length;
     }
 
     toggleHabitDate(habitId, dateString) {
@@ -115,28 +140,39 @@ class HabitManager {
     }
 
     getSortedHabits() {
-        const sortedHabits = [...this.habits];
-        
+        // A aba geral sempre fica no topo
+        const general = this.habits.find(h => h.isGeneral);
+        const others = this.habits.filter(h => !h.isGeneral);
+        let sortedHabits;
         switch (this.currentSortBy) {
             case 'name':
-                return sortedHabits.sort((a, b) => a.name.localeCompare(b.name));
+                sortedHabits = others.sort((a, b) => a.name.localeCompare(b.name));
+                break;
             case 'name-desc':
-                return sortedHabits.sort((a, b) => b.name.localeCompare(a.name));
+                sortedHabits = others.sort((a, b) => b.name.localeCompare(a.name));
+                break;
             case 'streak':
-                return sortedHabits.sort((a, b) => b.streak - a.streak);
+                sortedHabits = others.sort((a, b) => b.streak - a.streak);
+                break;
             case 'streak-asc':
-                return sortedHabits.sort((a, b) => a.streak - b.streak);
+                sortedHabits = others.sort((a, b) => a.streak - b.streak);
+                break;
             case 'total':
-                return sortedHabits.sort((a, b) => b.completedDates.length - a.completedDates.length);
+                sortedHabits = others.sort((a, b) => b.completedDates.length - a.completedDates.length);
+                break;
             case 'total-asc':
-                return sortedHabits.sort((a, b) => a.completedDates.length - b.completedDates.length);
+                sortedHabits = others.sort((a, b) => a.completedDates.length - b.completedDates.length);
+                break;
             case 'recent':
-                return sortedHabits.sort((a, b) => b.id - a.id);
+                sortedHabits = others.sort((a, b) => b.id - a.id);
+                break;
             case 'oldest':
-                return sortedHabits.sort((a, b) => a.id - b.id);
+                sortedHabits = others.sort((a, b) => a.id - b.id);
+                break;
             default:
-                return sortedHabits;
+                sortedHabits = others;
         }
+        return general ? [general, ...sortedHabits] : sortedHabits;
     }
 
     clearAllData() {

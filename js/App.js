@@ -47,17 +47,17 @@ class App {
     }
 
     deleteHabit(id) {
+        if (id === -1) return; // Não pode excluir a aba geral
         if (this.habitManager.deleteHabit(id)) {
             this.renderHabits();
         }
     }
 
     renameHabit(id) {
+        if (id === -1) return; // Não pode renomear a aba geral
         const habit = this.habitManager.getHabits().find(h => h.id === id);
         if (!habit) return;
-        
         const newName = prompt(`Rename habit "${habit.name}" to:`, habit.name);
-        
         if (newName && newName.trim() && newName.trim() !== habit.name) {
             if (this.habitManager.renameHabit(id, newName)) {
                 this.renderHabits();
@@ -118,6 +118,7 @@ class App {
     }
 
     openHabitSettings(habitId) {
+        if (habitId === -1) return; // Não pode abrir modal para aba geral
         this.createSettingsModal(habitId);
     }
 
